@@ -1,0 +1,202 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Alphalytix</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="{% static 'css/typicons.font/font/typicons.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/css/vendor.bundle.base.css' %}" />
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'css/select2/select2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/select2-bootstrap-theme/select2-bootstrap.min.css' %}" />
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <!-- endinject -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.jpeg' %}" />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'js/htmx.js' %}"></script>
+
+    <style>
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 2px;
+      }
+      .circle-runs {
+        fill: steelblue;
+      }
+      .circle-positions {
+        fill: orange;
+      }
+      .tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 5px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 1px solid steelblue;
+        border-radius: 5px;
+        pointer-events: none;
+        opacity: 1; /* Always visible */
+        transition: opacity 0.2s; /* Smooth transition */
+      }
+      .bg-custom-dark {
+        background-color: #1b1b29;
+        color: #fff;
+      }
+
+      .card-body .col-lg-6 .row {
+        align-items: center !important;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 120px;
+      }
+
+      #processingTimeDropdownContainer .navbar-dropdown {
+        left: 0;
+        right: auto;
+      }
+
+      .scrollleft {
+        overflow-y: scroll;
+        box-sizing: border-box;
+        height: 10px;
+      }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+  </head>
+
+  <body class="sidebar-light">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo">
+          <img src="{% static 'images/logo.png' %}" alt="" />
+        </a>
+        <button class="navbar-toggler navbar-toggler align-self-center d-none d-lg-flex" type="button" data-toggle="minimize">
+          <span class="typcn typcn-th-menu"></span>
+        </button>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav mr-lg-2">
+          {% if request.path == '/api-data5/' and request.method == 'POST' %}
+          <li class="nav-item dropdown d-flex show" id="processingTimeDropdownContainer">
+            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="processingTimeDropdown" href="#" data-toggle="dropdown" aria-expanded="true">
+              <img src="{% static 'images/clock.png' %}" width="30px" alt="" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-left navbar-dropdown preview-list show" aria-labelledby="processingTimeDropdown">
+              {% if processing_time %}
+              <p class="mb-0 font-weight-bold float-left dropdown-header">Processing Time</p>
+
+              <!-- Processing time item -->
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <h6 class="font-weight-medium text-dark mb-0">Server Time</h6>
+                </div>
+                <div class="preview-item-content flex-grow">
+                  <p class="font-weight-light small-text mb-0 text-color-primary">{{ processing_time }}</p>
+                </div>
+              </a>
+
+              {% else %}
+              <p class="mb-0 font-weight-normal float-left dropdown-header">There is no processing time.</p>
+              {% endif %}
+            </div>
+          </li>
+          {% endif %}
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="typcn typcn-th-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_settings-panel.html -->
+
+      <!-- partial -->
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <div class="d-flex sidebar-profile">
+              <div class="sidebar-profile-image mr-2">
+                <span class="user-initial-avatar"> {{ request.user.first_name|slice:":1" }}{{ request.user.last_name|slice:":1" }} </span>
+              </div>
+              <div class="sidebar-profile-name">
+                <p class="sidebar-name">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+                <p class="sidebar-designation">Welcome</p>
+              </div>
+            </div>
+          </li>
+          {% if request.path != '/rebalancing/' %}
+          <li class="nav-item {% if request.path == '/dashboard' %}active-menu-item{% endif %}">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+              <i class="typcn typcn-device-desktop menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+
+          {% endif %}
+        </ul>
+      </nav>
+
+      {% block content %} {% endblock content %}
+
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    <!-- container-scroller -->
+    <!-- base:js -->
+
+    <!-- End custom js for this page-->
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'js/app.min.js' %}"></script>
+    <script src="{% static 'js/simplebar.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+
+    <script>
+      function hidePageLoader() {
+        var pageLoader = document.querySelector('.page-loader');
+
+        setTimeout(function () {
+          pageLoader.style.display = 'none';
+        }, 500);
+      }
+
+      hidePageLoader();
+
+      // Get the navbar toggler button
+      var navbarToggler = document.querySelector('.navbar-toggler');
+
+      // Add a click event listener to the navbar toggler
+      navbarToggler.addEventListener('click', function () {
+        // Toggle the .sidebar-icon-only class on the body element
+        document.body.classList.toggle('sidebar-icon-only');
+
+        // Save the current state in localStorage
+        localStorage.setItem('sidebarIconOnly', document.body.classList.contains('sidebar-icon-only'));
+      });
+
+      document.body.addEventListener('htmx:configRequest', function (evt) {
+        evt.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      });
+    </script>
+  </body>
+</html>

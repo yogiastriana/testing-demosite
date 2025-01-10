@@ -1,0 +1,44 @@
+{% load static %}
+<script>
+  const ctx1 = document.getElementById('dummyPiechart1').getContext('2d');
+  const ctx2 = document.getElementById('dummyPiechart2').getContext('2d');
+  const ctx3 = document.getElementById('dummyPiechart3').getContext('2d');
+  const ctx4 = document.getElementById('dummyPiechart4').getContext('2d');
+  const ctx5 = document.getElementById('dummyPiechart5').getContext('2d');
+  const ctx6 = document.getElementById('dummyPiechart6').getContext('2d');
+  const ctx7 = document.getElementById('dummyPiechart7').getContext('2d');
+
+  const data = {
+    labels: ['Technology', 'Consumer Discretionary', 'Health Care', 'Financials', 'Communication Services', 'Energy'],
+    datasets: [
+      {
+        data: [42, 28, 10, 8, 7, 5],
+        backgroundColor: ['#4caf50', '#ff9800', '#2196f3', '#9c27b0', '#ff5722', '#607d8b'],
+        hoverBackgroundColor: ['#66bb6a', '#ffb74d', '#42a5f5', '#ab47bc', '#ff8a65', '#78909c'],
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+          },
+        },
+      },
+    },
+  };
+  new Chart(ctx1, { type: 'doughnut', data, options });
+  new Chart(ctx2, { type: 'doughnut', data, options });
+  new Chart(ctx3, { type: 'doughnut', data, options });
+  new Chart(ctx4, { type: 'doughnut', data, options });
+  new Chart(ctx5, { type: 'doughnut', data, options });
+  new Chart(ctx6, { type: 'doughnut', data, options });
+  new Chart(ctx7, { type: 'doughnut', data, options });
+</script>

@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="card-title">F1</h4>
+        <div>
+            
+            <button hx-trigger="click" data-bs-toggle="modal" data-bs-target="#f1-input-form-modal" type="button" class="btn btn-inverse-dark btn-icon btn-sm">
+                <i class="typcn typcn-th-list"></i>
+            </button>
+
+            <span id="f1-run-result-btn">
+                {% if is_f1_run_exist == 1 %}
+                    <a href="{% url 'current-f1-result' %}" class="btn btn-inverse-success btn-icon p-1">
+                        <i class="typcn typcn-eye"></i>
+                    </a>
+                {% else %}
+                    <div class="dropdown tooltip-dropdown">
+                        <button class="btn btn-inverse-success btn-icon p-1 dropdown-toggle" type="button" id="dropdownMenuIconButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="typcn typcn-eye"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuIconButton1" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 46px, 0px);">
+                            <a class="dropdown-item" href="#">Run the model to see result.</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </span>
+            
+        </div>
+    </div>
+    <div class="card-body" id="dashboard-f1-result">
+        <p class="text-center">Waiting to run the model.</p>
+        <div id="f1-loader" style="display: none;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>

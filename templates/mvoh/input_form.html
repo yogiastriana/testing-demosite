@@ -1,0 +1,440 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<!-- Bagian Pertama -->
+<div class="">
+  <div class="card">
+    <div class="card-body">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col">
+          <div class="p-2 rounded-2 bg-branding mt-2 mb-3">Dates</div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">Start Date</label>
+            </div>
+            <div>
+              <input type="date" class="form-control p-2" name="start_date" value="2020-01-01" />
+            </div>
+          </div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">End Date</label>
+            </div>
+            <div>
+              <input type="date" class="form-control p-2" name="end_date" value="2024-01-01" />
+            </div>
+          </div>
+          <div class="p-2 rounded-2 bg-branding mt-2 mb-3">Calculation Inputs</div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">Return Calculation</label>
+            </div>
+            <div>
+              <select class="form-control p-2" name="return_calculation">
+                <option value="Arithmetic">Arithmetic</option>
+                <option value="Logarithmic">Logarithmic</option>
+              </select>
+            </div>
+          </div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">Price Frequency</label>
+            </div>
+            <div>
+              <select class="form-control p-2" name="price_frequency">
+                <option value="Daily">Daily</option>
+              </select>
+            </div>
+          </div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">Risk Free Rate</label>
+            </div>
+            <div>
+              <input class="form-control p-2" name="risk_free_rate" value="0" />
+            </div>
+          </div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">Investment Amount</label>
+            </div>
+            <div>
+              <input class="form-control p-2" name="invested_amount" value="10000" />
+            </div>
+          </div>
+          <div class="custom-input-group">
+            <div>
+              <label class="form-label">Total Number of Companies</label>
+            </div>
+            <div>
+              <select id="totalCompanies" class="form-control">
+                <option value="">Option 1</option>
+                <option value="">Option 2</option>
+                <option value="">Option 3</option>
+                <option value="">Option 4</option>
+                <option value="">Option 5</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="">
+  <div class="card">
+    <div class="card-body">
+      {% csrf_token %}
+      <div class="row-piechart">
+        <!-- Sector Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Sector</div>
+          <div class="dropdown" id="sector-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('sector-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'sector-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="Technology" onchange="updateChart('sector-dropdown')" />
+                  Technology
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="Health" onchange="updateChart('sector-dropdown')" />
+                  Health
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="Finance" onchange="updateChart('sector-dropdown')" />
+                  Finance
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartSector" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include Sector
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Industry Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Industry</div>
+          <div class="dropdown" id="industry-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('industry-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'industry-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="Software" onchange="updateChart('industry-dropdown')" />
+                  Software
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="Pharmaceuticals" onchange="updateChart('industry-dropdown')" />
+                  Pharmaceuticals
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="Banking" onchange="updateChart('industry-dropdown')" />
+                  Banking
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartIndustry" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include Industry
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Market Cap Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Mkt Cap</div>
+          <div class="dropdown" id="marketcap-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('marketcap-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'marketcap-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="0-50" onchange="updateChart('marketcap-dropdown')" />
+                  0 - 50 Billion
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="50-100" onchange="updateChart('marketcap-dropdown')" />
+                  50 - 100 Billion
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="100+" onchange="updateChart('marketcap-dropdown')" />
+                  100 Billion and above
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartMarketCap" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include MarketCap
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beta Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Beta</div>
+          <div class="dropdown" id="beta-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('beta-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'beta-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="1.2" onchange="updateChart('beta-dropdown')" />
+                  Beta 1
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="0.8" onchange="updateChart('beta-dropdown')" />
+                  Beta 2
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="2.25" onchange="updateChart('beta-dropdown')" />
+                  Beta 3
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartBeta" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include Beta
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Volatility Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Volatility</div>
+          <div class="dropdown" id="volatility-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('volatility-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'volatility-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="25%" onchange="updateChart('volatility-dropdown')" />
+                  25%
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="50%" onchange="updateChart('beta-dropdown')" />
+                  50%
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="75%" onchange="updateChart('beta-dropdown')" />
+                  75%
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartVolatility" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include Volatility
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- PE Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">PE</div>
+          <div class="dropdown" id="pe-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('pe-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'pe-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="50" onchange="updateChart('pe-dropdown')" />
+                  50
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="75" onchange="updateChart('pe-dropdown')" />
+                  75
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="100" onchange="updateChart('pe-dropdown')" />
+                  100
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartPE" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include PE
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rev Dropdown and Chart -->
+        <div class="list-form-piechart">
+          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Rev Grouth</div>
+          <div class="dropdown" id="rev-dropdown">
+            <div>
+              <div class="dropdown-trigger" onclick="toggleDropdown('rev-dropdown')">
+                <span>0 </span> selected
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <label>
+                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'rev-dropdown')" />
+                  Select All
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="1.2" onchange="updateChart('rev-dropdown')" />
+                  rev 1
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="0.8" onchange="updateChart('rev-dropdown')" />
+                  rev 2
+                </label>
+                <label>
+                  <input type="checkbox" class="checkbox" value="2.25" onchange="updateChart('rev-dropdown')" />
+                  rev 3
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-4">
+            <canvas id="donutChartRev" width="115" height="150"></canvas>
+          </div>
+
+          <div class="mt-3">
+            <p class="text-center">0 of companies</p>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-center">
+              <label class="checkbox-container">
+                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
+                <span class="checkmark"></span>
+                Include Rev Grouth
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bagian Kedua -->
+
+{% include 'template-parts/multi_select_handler_marketcap.html' %}

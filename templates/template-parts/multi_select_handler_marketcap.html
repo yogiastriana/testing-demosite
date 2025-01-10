@@ -1,0 +1,381 @@
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let donutChartMarketCap; // Global variable for the Market Cap Donut Chart instance
+  let donutChartSector; // Global variable for the Sector Donut Chart instance
+  let donutChartIndustry; // Global variable for the Industry Donut Chart instance
+  let donutChartBeta; // Global variable for the Beta Donut Chart instance
+  let donutChartVolatility; // Global variable for the Volatility Donut Chart instance
+  let donutChartPE; // Global variable for the PE Donut Chart instance
+  let donutChartRev; // Global variable for the Revouth Donut Chart instance
+
+  // Toggles the dropdown menu
+  function toggleDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.classList.toggle('active');
+  }
+
+  // Handles "Select All" functionality
+  function selectAll(selectAllCheckbox, dropdownId) {
+    const checkboxes = document.querySelectorAll(`#${dropdownId} .checkbox:not(#select-all)`);
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = selectAllCheckbox.checked;
+    });
+    updateChart(dropdownId);
+  }
+
+  // Updates the Donut Chart based on selected checkboxes
+  function updateChart(dropdownId) {
+    const checkboxes = document.querySelectorAll(`#${dropdownId} .checkbox:not(#select-all)`);
+    const selectedOptions = [];
+
+    // Collect all selected checkbox values
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        selectedOptions.push(checkbox.value);
+      }
+    });
+
+    if (selectedOptions.length > 0) {
+      const groupedData = getFilteredData(selectedOptions, dropdownId);
+      if (dropdownId === 'marketcap-dropdown' && donutChartMarketCap) {
+        donutChartMarketCap.data.labels = Object.keys(groupedData);
+        donutChartMarketCap.data.datasets[0].data = Object.values(groupedData);
+        donutChartMarketCap.update();
+      } else if (dropdownId === 'sector-dropdown' && donutChartSector) {
+        donutChartSector.data.labels = Object.keys(groupedData);
+        donutChartSector.data.datasets[0].data = Object.values(groupedData);
+        donutChartSector.update();
+      } else if (dropdownId === 'industry-dropdown' && donutChartIndustry) {
+        donutChartIndustry.data.labels = Object.keys(groupedData);
+        donutChartIndustry.data.datasets[0].data = Object.values(groupedData);
+        donutChartIndustry.update();
+      } else if (dropdownId === 'beta-dropdown' && donutChartBeta) {
+        donutChartBeta.data.labels = Object.keys(groupedData);
+        donutChartBeta.data.datasets[0].data = Object.values(groupedData);
+        donutChartBeta.update();
+      } else if (dropdownId === 'volatility-dropdown' && donutChartVolatility) {
+        donutChartVolatility.data.labels = Object.keys(groupedData);
+        donutChartVolatility.data.datasets[0].data = Object.values(groupedData);
+        donutChartVolatility.update();
+      } else if (dropdownId === 'pe-dropdown' && donutChartPE) {
+        donutChartPE.data.labels = Object.keys(groupedData);
+        donutChartPE.data.datasets[0].data = Object.values(groupedData);
+        donutChartPE.update();
+      } else if (dropdownId === 'rev-dropdown' && donutChartRev) {
+        donutChartRev.data.labels = Object.keys(groupedData);
+        donutChartRev.data.datasets[0].data = Object.values(groupedData);
+        donutChartRev.update();
+      }
+    } else {
+      if (dropdownId === 'marketcap-dropdown' && donutChartMarketCap) {
+        donutChartMarketCap.data.labels = ['No Data'];
+        donutChartMarketCap.data.datasets[0].data = [1]; // Show empty data state
+        donutChartMarketCap.update();
+      }
+      if (dropdownId === 'sector-dropdown' && donutChartSector) {
+        donutChartSector.data.labels = ['No Data'];
+        donutChartSector.data.datasets[0].data = [1]; // Show empty data state
+        donutChartSector.update();
+      }
+      if (dropdownId === 'industry-dropdown' && donutChartIndustry) {
+        donutChartIndustry.data.labels = ['No Data'];
+        donutChartIndustry.data.datasets[0].data = [1]; // Show empty data state
+        donutChartIndustry.update();
+      }
+      if (dropdownId === 'beta-dropdown' && donutChartBeta) {
+        donutChartBeta.data.labels = ['No Data'];
+        donutChartBeta.data.datasets[0].data = [1]; // Show empty data state
+        donutChartBeta.update();
+      }
+      if (dropdownId === 'volatility-dropdown' && donutChartVolatility) {
+        donutChartVolatility.data.labels = ['No Data'];
+        donutChartVolatility.data.datasets[0].data = [1]; // Show empty data state
+        donutChartVolatility.update();
+      }
+      if (dropdownId === 'pe-dropdown' && donutChartPE) {
+        donutChartPE.data.labels = ['No Data'];
+        donutChartPE.data.datasets[0].data = [1]; // Show empty data state
+        donutChartPE.update();
+      }
+      if (dropdownId === 'rev-dropdown' && donutChartRev) {
+        donutChartRev.data.labels = ['No Data'];
+        donutChartRev.data.datasets[0].data = [1]; // Show empty data state
+        donutChartRev.update();
+      }
+    }
+  }
+
+  // Filters and groups data based on selected ranges
+  function getFilteredData(selectedOptions, dropdownId) {
+    const sp500Data = [
+      { name: 'Company A', marketCap: 34482898862, sector: 'Technology', industry: 'Software', beta: '1.2', volatility: '25%', pe: 50 },
+      { name: 'Company B', marketCap: 74828988620, sector: 'Health', industry: 'Pharmaceuticals', beta: '0.8', volatility: '50%', pe: 75 },
+      { name: 'Company C', marketCap: 48289886208, sector: 'Finance', industry: 'Banking', beta: '2.25', volatility: '75%', pe: 100 },
+    ];
+
+    const groupedData = {
+      '0-50 Billion': 0,
+      '50-100 Billion': 0,
+      '100 Billion and above': 0,
+      Technology: 0,
+      Health: 0,
+      Finance: 0,
+      Software: 0,
+      Pharmaceuticals: 0,
+      Banking: 0,
+      1.2: 0,
+      0.8: 0,
+      2.25: 0,
+      '25%': 0,
+      '50%': 0,
+      '75%': 0,
+      50: 0,
+      75: 0,
+      100: 0,
+    };
+
+    sp500Data.forEach((company) => {
+      const marketCap = company.marketCap;
+      const sector = company.sector;
+      const industry = company.industry;
+      const beta = company.beta;
+      const volatility = company.volatility;
+      const pe = company.pe;
+      const rev = company.rev;
+
+      // Filter by Market Cap
+      if (dropdownId === 'marketcap-dropdown') {
+        if (selectedOptions.includes('0-50') && marketCap <= 50000000000) {
+          groupedData['0-50 Billion']++;
+        }
+        if (selectedOptions.includes('50-100') && marketCap > 50000000000 && marketCap <= 100000000000) {
+          groupedData['50-100 Billion']++;
+        }
+        if (selectedOptions.includes('100+') && marketCap > 100000000000) {
+          groupedData['100 Billion and above']++;
+        }
+      }
+
+      // Filter by Sector
+      if (dropdownId === 'sector-dropdown') {
+        if (selectedOptions.includes(sector)) {
+          groupedData[sector]++;
+        }
+      }
+
+      // Filter by Industry
+      if (dropdownId === 'industry-dropdown') {
+        if (selectedOptions.includes(industry)) {
+          groupedData[industry]++;
+        }
+      }
+
+      // Filter by Beta
+      if (dropdownId === 'beta-dropdown') {
+        if (selectedOptions.includes(beta)) {
+          groupedData[beta]++;
+        }
+      }
+
+      // Filter by Volatility
+      if (dropdownId === 'volatility-dropdown') {
+        if (selectedOptions.includes(volatility)) {
+          groupedData[volatility]++;
+        }
+      }
+
+      // Filter by PE
+      if (dropdownId === 'pe-dropdown') {
+        if (selectedOptions.includes(pe)) {
+          groupedData[pe]++;
+        }
+      }
+
+      // Filter by Rev
+      if (dropdownId === 'rev-dropdown') {
+        if (selectedOptions.includes(rev)) {
+          groupedData[rev]++;
+        }
+      }
+    });
+
+    return groupedData;
+  }
+
+  // Initializes the Donut Chart
+  function createDonutCharts() {
+    const ctxMarketCap = document.getElementById('donutChartMarketCap').getContext('2d');
+    donutChartMarketCap = new Chart(ctxMarketCap, {
+      type: 'doughnut',
+      data: {
+        labels: ['0-50 Billion', '50-100 Billion', '100 Billion and above'],
+        datasets: [
+          {
+            label: 'Market Cap Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+
+    const ctxSector = document.getElementById('donutChartSector').getContext('2d');
+    donutChartSector = new Chart(ctxSector, {
+      type: 'doughnut',
+      data: {
+        labels: ['Technology', 'Health', 'Finance'],
+        datasets: [
+          {
+            label: 'Sector Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ff9f40', '#4bc0c0', '#ffcd56'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+
+    const ctxIndustry = document.getElementById('donutChartIndustry').getContext('2d');
+    donutChartIndustry = new Chart(ctxIndustry, {
+      type: 'doughnut',
+      data: {
+        labels: ['Software', 'Pharmaceuticals', 'Banking'],
+        datasets: [
+          {
+            label: 'Industry Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ffd051', '#fbc0c1', '#ffdd56'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+
+    const ctxBeta = document.getElementById('donutChartBeta').getContext('2d');
+    donutChartBeta = new Chart(ctxBeta, {
+      type: 'doughnut',
+      data: {
+        labels: ['Beta 1.2', 'Beta 0.8', 'Beta 2.25'],
+        datasets: [
+          {
+            label: 'Beta Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ffd051', '#fbc0c1', '#ffcb'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+
+    const ctxVolatility = document.getElementById('donutChartVolatility').getContext('2d');
+    donutChartVolatility = new Chart(ctxVolatility, {
+      type: 'doughnut',
+      data: {
+        labels: ['25%', '50%', '75%'],
+        datasets: [
+          {
+            label: 'Volatility Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ffd051', '#fbc0c1', '#ffcb'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+
+    const ctxPE = document.getElementById('donutChartPE').getContext('2d');
+    donutChartPE = new Chart(ctxPE, {
+      type: 'doughnut',
+      data: {
+        labels: ['50', '75', '100'],
+        datasets: [
+          {
+            label: 'PE Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ffd051', '#fbc0c1', '#ffcb'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+
+    const ctxRev = document.getElementById('donutChartRev').getContext('2d');
+    donutChartRev = new Chart(ctxRev, {
+      type: 'doughnut',
+      data: {
+        labels: [50, 75, 100],
+        datasets: [
+          {
+            label: 'Rev Distribution',
+            data: [0, 0, 0], // Initialize with zero values
+            backgroundColor: ['#ffd051', '#fbc0c1', '#ffcb'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false, // Disable legend display
+          },
+        },
+        cutout: '50%',
+      },
+    });
+  }
+
+  // Initialize the charts when the DOM is fully loaded
+  document.addEventListener('DOMContentLoaded', function () {
+    createDonutCharts();
+  });
+</script>

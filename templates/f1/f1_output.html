@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .main-panel {
+            position: relative;
+        }
+
+        .page-loader {
+            position: fixed;
+            left: 230px;
+            top: 60px;
+            width: calc(100% - 230px);
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+            text-align: center;
+            padding-top: 15%;
+        }
+
+        .page-loader img {
+            width: 200px;
+        }
+
+        .hidden-column {
+            display: none;
+        }
+
+        /* Highlighted columns */
+        .highlighted {
+            border: 3px solid black !important;
+        }
+
+        
+
+        th > div {
+            min-width: max-content;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <!-- partial -->
+    <div class="main-panel">
+        <div class="page-loader">
+            <img src="{% static 'images/loader.gif' %}" alt="image">
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-stretched">
+                        <div class="card-body">
+                            <button class="btn btn-secondary " onclick="toggleHiddenColumns()">Expand</button>
+                            <div class="table-responsive pb-3 custom-scrollbar-container">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><div>Company Name</div></th>
+                                            <th>Sector</th>
+                                            <th>Industry</th>
+                                            <th><div>Market Cap</div></th>
+                                            <th><div>Shares <span>2024-Jan-02</span></div></th>
+                                            <th><div>Price 2024-Jan-02</div></th>
+                                            <th class="hidden-column expandable"><div>Alloc 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>Value 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                            <th class="hidden-column expandable"><div>ΔValue 2024-Jan</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="background-color: #ffcccc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ffffcc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ccffcc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ffcccc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ffffcc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ccffcc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ffcccc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ffffcc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                        <tr style="background-color: #ccffcc;">
+                                            <td class="p-2">Johnson & Johnson</td>
+                                            <td class="p-2">Healthcare</td>
+                                            <td class="p-2">Drug Manufacturers</td>
+                                            <td class="p-2">$397B</td>
+                                            <td class="highlighted p-2">487</td>
+                                            <td class="highlighted p-2">$156.31</td>
+                                            <td class="hidden-column expandable p-2">7.61%</td>
+                                            <td class="hidden-column expandable p-2">$75,611</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                            <td class="hidden-column expandable p-2">+1.2%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    
+        
+        
+
+        <script>
+            function toggleHiddenColumns() {
+                // Select all expandable hidden columns
+                const hiddenColumns = document.querySelectorAll('.expandable');
+    
+                // Check the visibility state and toggle
+                const isHidden = hiddenColumns[0].classList.contains('hidden-column');
+                
+                hiddenColumns.forEach(column => {
+                    if (isHidden) {
+                        // Show columns
+                        column.classList.remove('hidden-column');
+                    } else {
+                        // Hide columns
+                        column.classList.add('hidden-column');
+                    }
+                });
+            }
+        </script>
+
+        <!-- content-wrapper ends -->
+   
+    </div>
+        
+    
+
+{% endblock content %}
