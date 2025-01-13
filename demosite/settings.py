@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'users',
     'runs',
     'mvoh',
-    'tickers'
+    'tickers',
+    'mytestapp'
 ]
 
 MIDDLEWARE = [

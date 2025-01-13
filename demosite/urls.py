@@ -37,4 +37,5 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('tickers/', include('tickers.urls')),
     path('admin/', admin.site.urls),
+    path('mytestapp/', include('mytestapp.urls')),  
 ]

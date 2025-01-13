@@ -9354,12 +9354,13 @@ pre code {
   display: block;
 }
 
-.chart-container {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
-  border-radius: 50%;
-  background: conic-gradient(#d3d3d3 0% 70%, #d3d3d3 70% 100%);
+.chart-mokup {
+  position: relative;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px !important;
 }
 
 .list-form-piechart {
@@ -20943,6 +20944,8 @@ code {
   padding-left: 0;
 }
 
+
+
 .form-check .form-check-label {
   min-height: 18px;
   display: block;
@@ -20950,6 +20953,7 @@ code {
   font-size: 0.875rem;
   line-height: 1.5;
 }
+
 
 .rtl .form-check .form-check-label {
   margin-left: 0;
