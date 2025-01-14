@@ -1,440 +1,294 @@
 {% load static %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-<!-- Bagian Pertama -->
 <div class="">
   <div class="card">
     <div class="card-body">
       {% csrf_token %}
+
       <div class="row">
-        <div class="col">
-          <div class="p-2 rounded-2 bg-branding mt-2 mb-3">Dates</div>
-          <div class="custom-input-group">
-            <div>
-              <label class="form-label">Start Date</label>
+        <div class="col-lg-3">
+          <div class="bg-branding p-2">Parameters</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="label">
+            <label for="">Total # of Companies</label>
+          </div>
+          <div class="input">
+            <input type="number" class="form-control p-2" value="0.00" />
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="label">
+            <label for="">Sector Restriction</label>
+          </div>
+          <div class="row sector">
+            <div class="col-lg-6">
+              <input type="number" class="form-control p-2" placeholder="Min. Value" />
             </div>
-            <div>
-              <input type="date" class="form-control p-2" name="start_date" value="2020-01-01" />
+            <div class="col-lg-6">
+              <input type="number" class="form-control p-2" placeholder="Max. Value" />
             </div>
           </div>
-          <div class="custom-input-group">
-            <div>
-              <label class="form-label">End Date</label>
-            </div>
-            <div>
-              <input type="date" class="form-control p-2" name="end_date" value="2024-01-01" />
-            </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="label">
+            <label for="">Total # of Companies in Portfolio</label>
           </div>
-          <div class="p-2 rounded-2 bg-branding mt-2 mb-3">Calculation Inputs</div>
-          <div class="custom-input-group">
-            <div>
-              <label class="form-label">Return Calculation</label>
-            </div>
-            <div>
-              <select class="form-control p-2" name="return_calculation">
-                <option value="Arithmetic">Arithmetic</option>
-                <option value="Logarithmic">Logarithmic</option>
-              </select>
-            </div>
+          <div class="input">
+            <input type="number" class="form-control p-2" value="0.00" />
           </div>
-          <div class="custom-input-group">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="bg-branding p-2 mt-3">Distribution Parameters</div>
+        </div>
+        <div class="col-lg-3">
+          <div class="p-2">
+            <label for="">Metric <small>(You can select maximum 5 metrics)</small></label>
             <div>
-              <label class="form-label">Price Frequency</label>
-            </div>
-            <div>
-              <select class="form-control p-2" name="price_frequency">
-                <option value="Daily">Daily</option>
-              </select>
-            </div>
-          </div>
-          <div class="custom-input-group">
-            <div>
-              <label class="form-label">Risk Free Rate</label>
-            </div>
-            <div>
-              <input class="form-control p-2" name="risk_free_rate" value="0" />
-            </div>
-          </div>
-          <div class="custom-input-group">
-            <div>
-              <label class="form-label">Investment Amount</label>
-            </div>
-            <div>
-              <input class="form-control p-2" name="invested_amount" value="10000" />
-            </div>
-          </div>
-          <div class="custom-input-group">
-            <div>
-              <label class="form-label">Total Number of Companies</label>
-            </div>
-            <div>
-              <select id="totalCompanies" class="form-control">
-                <option value="">Option 1</option>
-                <option value="">Option 2</option>
-                <option value="">Option 3</option>
-                <option value="">Option 4</option>
-                <option value="">Option 5</option>
+              <select name="" id="input-matric" class="form-control">
+                <option value="Marketcap">Marketcap</option>
+                <option value="Beta">Beta</option>
+                <option value="Volatility">Volatility</option>
+                <option value="PE">PE</option>
+                <option value="Rev_Growth">Rev Growth</option>
+                <option value="Dividen_Yield">Dividen Yield</option>
+                <option value="EPS">EPS</option>
+                <option value="Profit_Margin">Profit Margin</option>
+                <option value="ROE">ROE</option>
+                <option value="Debt_To_Equity">Debt To Equity</option>
+                <option value="Operating_Cash_Flow">Operating Cash Flow</option>
               </select>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="">
-  <div class="card">
-    <div class="card-body">
-      {% csrf_token %}
-      <div class="row-piechart">
-        <!-- Sector Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Sector</div>
-          <div class="dropdown" id="sector-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('sector-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="form-label p-2 d-block">Sector</label>
+              <div>
+                <select name="" id="sector" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Consumer Cyclical">Consumer Cyclical</option>
+                  <option value="Communication Services">Communication Services</option>
+                  <option value="Consumer Defensive">Consumer Defensive</option>
+                  <option value="Financial Services">Financial Services</option>
+                </select>
               </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'sector-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="Technology" onchange="updateChart('sector-dropdown')" />
-                  Technology
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="Health" onchange="updateChart('sector-dropdown')" />
-                  Health
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="Finance" onchange="updateChart('sector-dropdown')" />
-                  Finance
-                </label>
+              <div>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+              </div>
+              <div class="container-chart mt-4">
+                <label for=""> <input type="checkbox" name="" id="" />Total # of permutations </label>
               </div>
             </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartSector" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include Sector
-              </label>
+            <div class="col-lg-6">
+              <label for="form-label p-2 d-block">Sector</label>
+              <div>
+                <select name="" id="" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="Communication_Services">Communication Services</option>
+                  <option value="Consumer_Defensive">Consumer Defensive</option>
+                  <option value="Consumer_Cyclical">Consumer Cyclical</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Financial_Services">Financial Services</option>
+                </select>
+              </div>
+              <div>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+              </div>
+              <div class="container-chart mt-4">
+                <label for=""> <input type="checkbox" name="" id="" class="me-2" />Total # of permutations </label>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Industry Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Industry</div>
-          <div class="dropdown" id="industry-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('industry-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
+        <div class="col-lg-8">
+          <div class="row">
+            <div id="metric-row" class="container-chart-market">
+              <!-- Item 1 -->
+              <div>
+                <label for="marketcap-1">Marketcap</label>
+                <select id="marketcap-1" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 50 Billion">0 - 50 Billion</option>
+                  <option value="50 - 100 Billion">50 - 100 Billion</option>
+                  <option value="100 Billion and above">100 Billion and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Marketcap </label>
+                </div>
               </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'industry-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="Software" onchange="updateChart('industry-dropdown')" />
-                  Software
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="Pharmaceuticals" onchange="updateChart('industry-dropdown')" />
-                  Pharmaceuticals
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="Banking" onchange="updateChart('industry-dropdown')" />
-                  Banking
-                </label>
+              <!-- Item 2 -->
+              <div>
+                <label for="beta">Beta</label>
+                <select id="beta" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 1">0 - 1</option>
+                  <option value="1 - 2">1 - 2</option>
+                  <option value="2 - 3">2 - 3</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Beta </label>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartIndustry" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include Industry
-              </label>
+              <!-- Item 3 -->
+              <div>
+                <label for="volatility">Volatilitiy</label>
+                <select id="volatility" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 0.5">0 - 0.5</option>
+                  <option value="0.5 - 1">0.5 - 1</option>
+                  <option value="1 and above">1 and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Volatilitiy </label>
+                </div>
+              </div>
+              <!-- Item 4 -->
+              <div>
+                <label for="pe">PE</label>
+                <select id="pe" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 15">0 - 15</option>
+                  <option value="15 - 30">15 - 30</option>
+                  <option value="30 and above">30 and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include PE </label>
+                </div>
+              </div>
+              <!-- Item 5 -->
+              <div>
+                <label for="rev_growth">Rev Growth</label>
+                <select id="rev_growth" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 5%">0 - 5%</option>
+                  <option value="5 - 10%">5 - 10%</option>
+                  <option value="10% and above">10% and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Rev Growth </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Market Cap Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Mkt Cap</div>
-          <div class="dropdown" id="marketcap-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('marketcap-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'marketcap-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="0-50" onchange="updateChart('marketcap-dropdown')" />
-                  0 - 50 Billion
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="50-100" onchange="updateChart('marketcap-dropdown')" />
-                  50 - 100 Billion
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="100+" onchange="updateChart('marketcap-dropdown')" />
-                  100 Billion and above
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartMarketCap" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include MarketCap
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Beta Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Beta</div>
-          <div class="dropdown" id="beta-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('beta-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'beta-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="1.2" onchange="updateChart('beta-dropdown')" />
-                  Beta 1
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="0.8" onchange="updateChart('beta-dropdown')" />
-                  Beta 2
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="2.25" onchange="updateChart('beta-dropdown')" />
-                  Beta 3
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartBeta" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include Beta
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Volatility Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Volatility</div>
-          <div class="dropdown" id="volatility-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('volatility-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'volatility-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="25%" onchange="updateChart('volatility-dropdown')" />
-                  25%
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="50%" onchange="updateChart('beta-dropdown')" />
-                  50%
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="75%" onchange="updateChart('beta-dropdown')" />
-                  75%
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartVolatility" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include Volatility
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- PE Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">PE</div>
-          <div class="dropdown" id="pe-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('pe-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'pe-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="50" onchange="updateChart('pe-dropdown')" />
-                  50
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="75" onchange="updateChart('pe-dropdown')" />
-                  75
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="100" onchange="updateChart('pe-dropdown')" />
-                  100
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartPE" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include PE
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Rev Dropdown and Chart -->
-        <div class="list-form-piechart">
-          <div class="dropdown-label p-2 rounded-2 bg-branding mt-2 mb-3 text-center">Rev Grouth</div>
-          <div class="dropdown" id="rev-dropdown">
-            <div>
-              <div class="dropdown-trigger" onclick="toggleDropdown('rev-dropdown')">
-                <span>0 </span> selected
-                <i class="fas fa-chevron-down"></i>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <label>
-                  <input type="checkbox" class="checkbox" id="select-all" onchange="selectAll(this, 'rev-dropdown')" />
-                  Select All
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="1.2" onchange="updateChart('rev-dropdown')" />
-                  rev 1
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="0.8" onchange="updateChart('rev-dropdown')" />
-                  rev 2
-                </label>
-                <label>
-                  <input type="checkbox" class="checkbox" value="2.25" onchange="updateChart('rev-dropdown')" />
-                  rev 3
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-container mt-4">
-            <canvas id="donutChartRev" width="115" height="150"></canvas>
-          </div>
-
-          <div class="mt-3">
-            <p class="text-center">0 of companies</p>
-          </div>
-
-          <div class="mt-3">
-            <div class="text-center">
-              <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" onchange="toggleCheckboxColor(this)" />
-                <span class="checkmark"></span>
-                Include Rev Grouth
-              </label>
-            </div>
-          </div>
-        </div>
+      </div>
+      <div class="submit mt-4 d-flex justify-content-end">
+        <button type="submit" class="btn bg-branding">Process</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bagian Kedua -->
+<script>
+  const data = [
+    { Symbol: 'AAPL', Sector: 'Technology', Industry: 'Consumer Electronics', Marketcap: 3448289886208 },
+    { Symbol: 'MSFT', Sector: 'Technology', Industry: 'Software - Infrastructure', Marketcap: 3092590624768 },
+    { Symbol: 'NVDA', Sector: 'Technology', Industry: 'Semiconductors', Marketcap: 3064287461376 },
+    { Symbol: 'GOOG', Sector: 'Communication Services', Industry: 'Internet Content & Information', Marketcap: 2064893739008 },
+    { Symbol: 'AMZN', Sector: 'Consumer Cyclical', Industry: 'Internet Retail', Marketcap: 1957534236672 },
+    { Symbol: 'META', Sector: 'Communication Services', Industry: 'Internet Content & Information', Marketcap: 1507620814848 },
+    { Symbol: 'TSLA', Sector: 'Consumer Cyclical', Industry: 'Auto Manufacturers', Marketcap: 798915559424 },
+    { Symbol: 'WMT', Sector: 'Consumer Defensive', Industry: 'Discount Stores', Marketcap: 650615980032 },
+    { Symbol: 'JPM', Sector: 'Financial Services', Industry: 'Banks - Diversified', Marketcap: 600954699776 },
+    { Symbol: 'V', Sector: 'Financial Services', Industry: 'Credit Services', Marketcap: 540818440192 },
+  ];
 
-{% include 'template-parts/multi_select_handler_marketcap.html' %}
+  function createDonutChart(ctx, labels, data) {
+    return new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Sector Distribution',
+            data: data,
+            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A6', '#33FFF5', '#FF9F33', '#57FF33', '#A633FF', '#FF3333'],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function updateCharts() {
+    const selectedSector = Array.from(document.getElementById('sector').selectedOptions).map((option) => option.value);
+
+    // Filter Data based on selections
+    const filteredData = data.filter((item) => {
+      const isSectorSelected = selectedSector.includes('selectAll') || selectedSector.includes(item.Sector);
+      return isSectorSelected;
+    });
+
+    const sectorCount = aggregateData(filteredData, 'Sector');
+
+    updateChart(sectorChart, Object.keys(sectorCount), Object.values(sectorCount));
+  }
+
+  // Aggregate data for charts
+  function aggregateData(data, key) {
+    return data.reduce((acc, item) => {
+      acc[item[key]] = (acc[item[key]] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  // Update chart with new data
+  function updateChart(chart, labels, data) {
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = data;
+    chart.update();
+  }
+
+  updateChart();
+
+  document.getElementById('sector').addEventListener('change', updateCharts);
+</script>
