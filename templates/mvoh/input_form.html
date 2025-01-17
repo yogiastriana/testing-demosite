@@ -83,6 +83,7 @@
               </div>
               <div class="container-chart mt-4">
                 <canvas id="sectorChart"></canvas>
+                <h3 class="mt-4">0 of Companies</h3>
               </div>
               <div class="container-chart mt-4">
                 <label for=""> <input type="checkbox" name="" id="" />Total # of permutations </label>
@@ -106,6 +107,7 @@
               </div>
               <div class="container-chart mt-4">
                 <canvas id="industryChart"></canvas>
+                <h3 class="mt-4">0 of Companies</h3>
               </div>
               <div class="container-chart mt-4">
                 <label for=""> <input type="checkbox" name="" id="" />Total # of permutations </label>
@@ -117,7 +119,97 @@
 
         <div class="col-lg-8">
           <div id="p1-metric-row"></div>
-          
+          <div class="row">
+            <div id="metric-row" class="container-chart-market">
+              <div>
+                <label for="marketcap-1">Marketcap</label>
+                <select id="marketcap" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 50 Billion">0 - 50 Billion</option>
+                  <option value="50 - 100 Billion">50 - 100 Billion</option>
+                  <option value="100 Billion and above">100 Billion and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Marketcap </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="beta">Beta</label>
+                <select id="beta" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 1">0 - 1</option>
+                  <option value="1 - 2">1 - 2</option>
+                  <option value="2 - 3">2 - 3</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Beta </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="volatility">Volatilitiy</label>
+                <select id="volatility" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 0.5">0 - 0.5</option>
+                  <option value="0.5 - 1">0.5 - 1</option>
+                  <option value="1 and above">1 and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <div id="volatilityChart"></div>
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Volatilitiy </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="pe">PE</label>
+                <select id="pe" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 15">0 - 15</option>
+                  <option value="15 - 30">15 - 30</option>
+                  <option value="30 and above">30 and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include PE </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="rev_growth">Rev Growth</label>
+                <select id="rev_growth" class="form-control">
+                  <option value="Select_All">Select all</option>
+                  <option value="0 - 5%">0 - 5%</option>
+                  <option value="5 - 10%">5 - 10%</option>
+                  <option value="10% and above">10% and above</option>
+                </select>
+                <div class="container-chart mt-4">
+                  <img src="{% static 'images/demo-pie.png' %}" alt="" />
+                  <h3 class="mt-4">0 of Companies</h3>
+                </div>
+                <div class="container-chart mt-4">
+                  <label for=""> <input type="checkbox" name="" id="" />Include Rev Growth </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -255,351 +347,3 @@
   }
 </script>
 
-<!-- <script>
-  $(document).ready(function () {
-    // Initialize the multi-select for Industry dropdown
-    $('#sector-input').multiselect({
-      includeSelectAllOption: true,
-    });
-
-    $('#industry-input').multiselect({
-      includeSelectAllOption: true,
-    });
-
-    $('#metric-input')
-      .multiselect()
-      .on('change', function (e) {
-        var selectedOptions = $(this).val(); // Get the selected options
-        if (selectedOptions.length > 5) {
-          // If more than 5 options are selected, remove the last one
-          selectedOptions.pop();
-          $(this).val(selectedOptions); // Update the select box with the new value
-          $(this).multiselect('refresh'); // Refresh the multiselect
-        }
-      });
-
-    const p1SectorChartDiv = document.getElementById('p1-sector-chart-div');
-    const p1IndustryChartDiv = document.getElementById('p1-industry-chart-div');
-
-    $('#sector-input').on('change', function () {
-      const selectedSector = $(this).val();
-
-      // Fetch new options dynamically (example with AJAX)
-      $.ajax({
-        url: '/mytestapp/get-sector-industries/',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': '{{ csrf_token }}',
-        },
-        data: JSON.stringify({ sectors: selectedSector }), // Send the selected sector as data
-
-        success: function (response) {
-          // Clear existing options
-          $('#industry-input').empty();
-
-          var sectorCompanyNumberElement = document.createElement('h3');
-          sectorCompanyNumberElement.textContent = `${response.total_companies} of companies`;
-
-          var industryCompanyNumberElement = document.createElement('h3');
-          industryCompanyNumberElement.textContent = `${response.total_companies} of companies`;
-
-          createGenericPieChart(p1SectorChartDiv, response.sectors, '', 'p1-sector-chart');
-          p1SectorChartDiv.appendChild(sectorCompanyNumberElement);
-          createGenericPieChart(p1IndustryChartDiv, response.industries, '', 'p1-industry-chart');
-          p1IndustryChartDiv.appendChild(industryCompanyNumberElement);
-
-          // Add new options dynamically from the response
-          $.each(response.industries, function (index, industry) {
-            $('#industry-input').append(`<option value="${industry.name}">${industry.name} (${industry.value})</option>`);
-          });
-
-          // Rebuild the multiselect with the new options
-          $('#industry-input').multiselect('rebuild');
-        },
-        error: function () {
-          console.error('Failed to fetch industries.');
-        },
-      });
-    });
-
-    // Industry dropdown change event
-    $('#industry-input')
-      .off('change')
-      .on('change', function () {
-        const selectedIndustries = $(this).val();
-
-        // Fetch new options dynamically (example with AJAX)
-        $.ajax({
-          url: '/mytestapp/get-industries/',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}',
-          },
-          data: JSON.stringify({ industries: selectedIndustries }), // Send the selected sector as data
-          success: function (response) {
-            var industryCompanyNumberElement = document.createElement('h3');
-            industryCompanyNumberElement.textContent = `${response.total_companies} of companies`;
-            createGenericPieChart(p1IndustryChartDiv, response.industries, '', 'p1-industry-chart-2');
-            p1IndustryChartDiv.appendChild(industryCompanyNumberElement);
-          },
-          error: function () {
-            console.error('Failed to fetch industries.');
-          },
-        });
-      });
-
-    $('#metric-input').on('change', function () {
-      var metricValues = $(this).val(); // Get the selected metrics
-      var metricRowDiv = $('#p1-metric-row'); // Target container
-
-      // Clear the container
-      metricRowDiv.empty();
-
-      // Hardcoded ranges for each metric
-      const metricRanges = {
-        Marketcap: [
-          { value: '0-50', text: '0 - 50 Billion', range: [0, 50] },
-          { value: '50-100', text: '50 - 100 Billion', range: [50, 100] },
-          { value: '100+', text: '100 Billion and above', range: [100, Infinity] },
-        ],
-        Beta: [
-          { value: '0-1', text: '0 - 1', range: [0, 1] },
-          { value: '1-2', text: '1 - 2', range: [1, 2] },
-          { value: '2-3', text: '2 - 3', range: [2, 3] },
-        ],
-        Volatility: [
-          { value: '0-0.5', text: '0 - 0.5', range: [0, 0.5] },
-          { value: '0.5-1', text: '0.5 - 1', range: [0.5, 1] },
-          { value: '1+', text: '1 and above', range: [1, Infinity] },
-        ],
-        PE: [
-          { value: '0-15', text: '0 - 15', range: [0, 15] },
-          { value: '15-30', text: '15 - 30', range: [15, 30] },
-          { value: '30+', text: '30 and above', range: [30, Infinity] },
-        ],
-        Rev_Growth: [
-          { value: '0-5', text: '0 - 5%', range: [0, 5] },
-          { value: '5-10', text: '5 - 10%', range: [5, 10] },
-          { value: '10+', text: '10% and above', range: [10, Infinity] },
-        ],
-        Dividend_Yield: [
-          { value: '0-1', text: '0 - 1%', range: [0, 1] },
-          { value: '1-3', text: '1 - 3%', range: [1, 3] },
-          { value: '3+', text: '3% and above', range: [3, Infinity] },
-        ],
-        EPS: [
-          { value: '0-5', text: '0 - 5', range: [0, 5] },
-          { value: '5-10', text: '5 - 10', range: [5, 10] },
-          { value: '10+', text: '10 and above', range: [10, Infinity] },
-        ],
-        Profit_Margin: [
-          { value: '0-10', text: '0 - 10%', range: [0, 10] },
-          { value: '10-20', text: '10 - 20%', range: [10, 20] },
-          { value: '20+', text: '20% and above', range: [20, Infinity] },
-        ],
-        ROE: [
-          { value: '0-20', text: '0 - 20%', range: [0, 20] },
-          { value: '20-40', text: '20 - 40%', range: [20, 40] },
-          { value: '40+', text: '40% and above', range: [40, Infinity] },
-        ],
-        Debt_To_Equity: [
-          { value: '0-1', text: '0 - 1', range: [0, 1] },
-          { value: '1-2', text: '1 - 2', range: [1, 2] },
-          { value: '2+', text: '2 and above', range: [2, Infinity] },
-        ],
-        Operating_Cash_Flow: [
-          { value: '0-50', text: '0 - 50 Billion', range: [0, 50] },
-          { value: '50-100', text: '50 - 100 Billion', range: [50, 100] },
-          { value: '100+', text: '100 Billion and above', range: [100, Infinity] },
-        ],
-      };
-
-      // Loop through selected metrics and create HTML
-      metricValues.forEach(function (metric) {
-        // Get hardcoded ranges for the metric
-        var ranges = metricRanges[metric] || [];
-
-        // Generate options HTML
-        var optionsHtml = ranges.map((range) => `<option value="${range.value}">${range.text}</option>`).join('');
-
-        var html = `
-                    <div class="metric-block mb-3" id="metric-${metric}">
-                        <label class="bg-branding p-2 d-block text-center">${metric.replace(/_/g, ' ')}</label>
-                        <select class="form-control metric-select" id="multi-select-${metric}" multiple="multiple" data-metric="${metric}">
-                            ${optionsHtml}
-                        </select>
-                         
-                        <div id="chart-${metric}" style="width: 100%; height: 200px;"></div>
-                        <div class="mb-4 text-center">
-                            <h4><span id="${metric}-company-number">0</span> of companies</h4>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div class="form-check form-check-success">
-                                <label class="form-check-label" for="checkbox-${metric}">
-                                    <input type="checkbox" name="p1-${metric}-check" class="form-check-input" checked="" id="checkbox-${metric}">
-                                    Include ${metric.replace(/_/g, ' ')}
-                                <i class="input-helper"></i></label>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-        // Append the generated HTML
-        metricRowDiv.append(html);
-
-        // Initialize the Bootstrap Multiselect
-        $(`#multi-select-${metric}`).multiselect({
-          includeSelectAllOption: true,
-          buttonWidth: '100%',
-          numberDisplayed: 1,
-          buttonText: function (options, select) {
-            var selectedCount = options.length;
-            return selectedCount + ' selected'; // Display the number of selected options
-          },
-        });
-
-        // Initialize an empty ECharts instance for the chart div
-        var chart = echarts.init(document.getElementById(`chart-${metric}`));
-        var chartOption = {
-          tooltip: { trigger: 'item' },
-          series: [
-            {
-              name: metric,
-              type: 'pie',
-              radius: ['30%', '60%'],
-              avoidLabelOverlap: false,
-              itemStyle: {
-                borderRadius: 10,
-                borderColor: '#fff',
-                borderWidth: 2,
-              },
-              label: {
-                show: false,
-                position: 'center',
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: 10,
-                  fontWeight: 'bold',
-                },
-              },
-              labelLine: {
-                show: false,
-              },
-              data: [], // Initially empty
-            },
-          ],
-        };
-        chart.setOption(chartOption);
-
-        // Store chart instance for later updates
-        $(`#multi-select-${metric}`).data('chart', chart);
-      });
-    });
-  });
-
-  $(document).on('change', '.metric-select', function () {
-    var selectedOption = $(this).val();
-    var metric = $(this).data('metric');
-    var chart = $(this).data('chart'); // Retrieve the chart instance
-
-    if (selectedOption) {
-      // Fetch data from backend based on the selected option
-      $.ajax({
-        // url: 'fetch-p1-metric-data/',
-        url: '{% url "fetch-p1-metric-data" %}',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': '{{ csrf_token }}',
-        },
-        data: JSON.stringify({ metric: metric, option: selectedOption }),
-        success: function (response) {
-          // Update the chart with fetched data
-          chart.setOption({
-            series: [
-              {
-                data: response.chartData, // Update with backend data
-              },
-            ],
-          });
-
-          console.log(response.companyCount);
-          $(`#${metric}-company-number`).html(response.companyCount);
-        },
-        error: function () {
-          console.error(`Failed to fetch data for ${metric}`);
-        },
-      });
-    }
-  });
-
-  function createGenericPieChart(parentDiv, chartData, title = '', chartId) {
-    while (parentDiv.hasChildNodes()) {
-      parentDiv.removeChild(parentDiv.firstChild);
-    }
-
-    var chartDiv = document.createElement('div');
-    chartDiv.id = `${chartId}`;
-    chartDiv.style.width = '100%';
-    chartDiv.style.height = '200px';
-    parentDiv.appendChild(chartDiv);
-
-    var myChart = echarts.init(chartDiv);
-
-    var chartOption;
-
-    chartOption = {
-      tooltip: {
-        trigger: 'item',
-      },
-      series: [
-        {
-          name: 'Access From',
-          type: 'pie',
-          radius: ['30%', '60%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2,
-          },
-          label: {
-            show: false,
-            position: 'center',
-            formatter: '{b}: ({d}%)',
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: 10,
-              fontWeight: 'bold',
-            },
-          },
-          labelLine: {
-            show: false,
-          },
-          data: [],
-        },
-      ],
-    };
-
-    if (chartOption && typeof chartOption === 'object') {
-      myChart.setOption(chartOption);
-      myChart.setOption({
-        series: [
-          {
-            data: chartData,
-          },
-        ],
-      });
-    }
-
-    window.addEventListener('resize', function () {
-      myChart.resize();
-    });
-  }
-</script> -->
