@@ -1,0 +1,63 @@
+{% load static %}
+<div id="input-form-modal" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <form id="saveRunForm" hx-post="{% url 'run-mvoh' %}" hx-target="#dashboard-result">
+      {% csrf_token %}
+      <div class="modal-content" id="run-input-form">
+        <div class="modal-header d-flex justify-content-between align-items-center px-4 py-2">
+          <div></div>
+          <!-- Close button -->
+          <button type="button" class="btn btn-inverse-danger p-2" data-bs-dismiss="modal" aria-label="Close"><i class="typcn typcn-times"></i></button>
+        </div>
+        <div id="mv-input-container">{% include 'mvoh/input_form.html' %}</div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('saveRunForm').addEventListener('submit', function (event) {
+    // Mencegah form submit secara default agar HTMX dapat menangani permintaan
+    event.preventDefault();
+
+    // Menampilkan loader sebelum modal ditutup
+    const loader = document.getElementById('loader');
+    const resultText = document.querySelector('#dashboard-result p');
+
+    if (loader) {
+      loader.style.display = 'block';
+    } else {
+      console.error('Loader tidak ditemukan, membuat loader baru.');
+      document.querySelector('#dashboard-result').innerHTML = `
+        <div id="loader">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>`;
+    }
+
+    // Menyembunyikan teks hasil sementara
+    if (resultText) {
+      resultText.style.display = 'none';
+    } else {
+      console.error('Elemen result text tidak ditemukan.');
+    }
+
+    // Menutup modal input form
+    const saveModal = document.getElementById('input-form-modal');
+    const saveModalInstance = bootstrap.Modal.getOrCreateInstance(saveModal);
+
+    if (saveModalInstance) {
+      saveModalInstance.hide();
+    }
+
+    // Memicu permintaan HTMX
+    htmx.trigger(this, 'htmx:submit');
+
+    // Memperbarui tombol hasil dengan tautan baru
+    document.getElementById('mvoh-run-result-btn').innerHTML = `
+      <a href="{% url 'current-mvoh-result' %}" class="btn btn-inverse-success btn-icon p-1">
+        <i class="typcn typcn-eye"></i>
+      </a>`;
+  });
+</script>
